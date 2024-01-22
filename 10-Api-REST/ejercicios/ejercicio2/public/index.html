@@ -1,0 +1,32 @@
+<!-- 2. Disney: Usa la api https://api.disneyapi.dev/characters/xxx para pedir un personaje aleatorio pasándole un
+número entre 001 y 500 en vez del xxx.. Crea un div en el que aparezca la foto, el nombre y el id. Si estuviera
+disponible, enumerar las películas donde ha salido. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <form>
+        <label for="idcharacter">Indica el Id de tu personaje favorito:</label>
+        <input id="idcharacter" name="idcharacter" type="number">        
+        <button type="button" onclick="getInfo()">Buscar</button>
+        <span id="msg" style="color: red;">mensaje</span>        
+    </form>
+    <div id="container">
+        <img id="img" src="" alt="">
+        <div>
+            <p>Id: <span id="id"></span> </p>
+            <p>Nombre: <b><span id="name"></span></b></p>                        
+        </div>
+        <div id="container-movies">
+            <p>Pelis:</p>
+            <ol id="listMovies"></ol>
+        </div>        
+    </div>    
+</body>
+<script src="showpic.js"></script>
+</html>
