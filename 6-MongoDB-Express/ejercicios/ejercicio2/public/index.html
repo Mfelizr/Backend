@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Gestión de mis Libros</h1>
+    <div>
+        <ul id="bookslist">
+        </ul>
+    </div>
+    <!-- <form action="">
+        <label for="titulo">Titulo: </label>
+        <input type="text" name="titulo" id="titulo">
+        <button id="update" type="button">Leido</button>
+        <button id="delete" type="button">Eliminar</button>
+    </form> -->
+
+<script>
+    fetch('api/libros')
+    .then((res)=>res.json())
+    .then((datos) => {
+        datos.results.forEach(element => {
+            document.querySelector("#bookslist").innerHTML += `<li>${element.titulo} <button type="button" onclick="reedBook">Leido</button><button type="button" onclick="deleteBook">Eliminar</button></li>`
+        });
+    })
+
+    function reedBook(){
+        fetch('/api/editarLibro/', {method:"PUT"})
+    }
+</script>
+</body>
+</html>
