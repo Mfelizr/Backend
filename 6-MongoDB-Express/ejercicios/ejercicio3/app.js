@@ -3,8 +3,6 @@ const app = express()
 const {MongoClient} = require('mongodb')
 const PORT = process.env.PORT ||3000
 
-//let { MongoClient, ObjectId } = require('mongodb')
-
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
@@ -23,32 +21,36 @@ async function connectMongo() {
 connectMongo()
 
 // 1- Buscar Series
-app.get('api/series', async(res, req) =>{
+app.get('/api/series', async(req, res) =>{
     try {
-        const results = await app.locals.db.collection('series').find().toArray()
-        res.send({mensaje: 'Peticion realizada', results})
+        const results = await app.locals.db.collection('seriestv').find().toArray()
+        res.send({mensaje: 'Consulta realizada', results})
     } catch (error) {
-        res.send({mensaje: 'Error en la peticion', error})        
+        res.send({mensaje: 'Error en la consulta', error})        
     }
 })
 
 // 2 - Buscar Serie
-app.get('api/series/:serie', async(res, req) =>{
+app.get('/api/series/:serie', async(req, res) =>{
+    console.log("Parametro: ", req.params.serie)
     try {
-        const results = await app.locals.db.collection('series').find({titulo:req.params.titulo}).toArray()
+        const results = await app.locals.db.collection('seriestv').find({titulo:req.params.serie}).toArray()
         results.length > 0
-        ? res.send({mensaje: 'Peticion realizada', results})
+        ? res.send({mensaje: 'Consulta realizada', results})
         : res.send({mensaje: 'No hay registros para mostrar'})
         
     } catch (error) {
-        res.send({mensaje: 'Error en la petición', error})        
+        res.send({mensaje: 'Error consultando serie', error})        
     }
 })
 
+//3- Inserta serie
 app.post('/api/nuevaSerie/', async(req, res)=>{
+    console.log("BODY: ", req.body)
     try {        
       let {titulo, plataforma, nota}  = req.body
-      const results = await app.locals.db.collection('series').insertOne({titulo:req.query.titulo, plataforma: req.query.plataforma, nota: req.query.nota})
+      nota = parseInt(nota)
+      const results = await app.locals.db.collection('seriestv').insertOne({titulo, plataforma, nota})
       res.status(200).send({mensaje: "Nueva Serie insertada", results})
     } catch (error) {
         res.status(500).send({mensaje: "No insertada"})

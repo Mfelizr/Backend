@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Libros</title>
 </head>
 <body>
     <h1>Gestión de mis Libros</h1>
@@ -11,24 +11,32 @@
         <ul id="bookslist">
         </ul>
     </div>
-    <!-- <form action="">
-        <label for="titulo">Titulo: </label>
-        <input type="text" name="titulo" id="titulo">
-        <button id="update" type="button">Leido</button>
-        <button id="delete" type="button">Eliminar</button>
-    </form> -->
-
+    <div>
+        <h3 style="color: blue;"></h3>
+    </div>    
+        
 <script>
-    fetch('api/libros')
+    fetch('/api/libros')
     .then((res)=>res.json())
     .then((datos) => {
         datos.results.forEach(element => {
-            document.querySelector("#bookslist").innerHTML += `<li>${element.titulo} <button type="button" onclick="reedBook">Leido</button><button type="button" onclick="deleteBook">Eliminar</button></li>`
+            document.querySelector("#bookslist").innerHTML += `<li>${element.titulo}<button type="button" onclick="readBook('${element.titulo}')">Leido</button><button type="button" onclick="deleteBook('${element.titulo}')">Eliminar</button></li>`
         });
     })
-
-    function reedBook(){
-        fetch('/api/editarLibro/', {method:"PUT"})
+    function readBook(titulo){
+        fetch(`/api/editarLibro/${titulo}`, {method:"PUT"})
+        .then((res) => res.json())
+        .then((datos) => {
+            console.log("DATOS: ",datos)
+            document.querySelector("h3").innerHTML = `${datos.mensaje}`
+        })
+    }
+    function deleteBook(titulo){
+        fetch(`/api/borrarLibro/${titulo}`, {method:"DELETE"})
+        .then((res)=>res.json())
+        .then((datos) => {
+            document.querySelector("h3").innerHTML = `${datos.mensaje}`
+        })
     }
 </script>
 </body>

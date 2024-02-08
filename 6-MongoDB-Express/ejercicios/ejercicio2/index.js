@@ -3,8 +3,6 @@ const app = express()
 const {MongoClient} = require('mongodb')
 const PORT = process.env.PORT ||3000
 
-//let { MongoClient, ObjectId } = require('mongodb')
-
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
@@ -22,8 +20,8 @@ async function connectMongo() {
 }
 connectMongo()
 
-// Buscar libros
-app.get('api/libros', async(res, req) =>{
+//1-Buscar libros
+app.get('/api/libros', async(req, res) =>{
     try {
         const results = await app.locals.db.collection('libros').find().toArray()
         results.length > 0
@@ -35,26 +33,27 @@ app.get('api/libros', async(res, req) =>{
 })
 
 // 2 - Buscar libros por titulo
-app.get('api/libros/:titulo', async(res, req) =>{
+app.get('/api/libros/:titulo', async(req, res) =>{
+    console.log ("Titulo parametro: ", req.params.titulo)
     try {
-        const results = await app.locals.db.collection('libros').find({titulo:req.params.titulo}).toArray()
+        const results = await app.locals.db.collection('libros').find({titulo: req.params.titulo}).toArray()
+        results.length > 0
         ? res.send({mensaje: 'Busqueda realizada satisfactoriamente', results})
         : res.send({mensaje: 'No existen registros para mostrar', results})        
     } catch (error) {
         res.send({mensaje: 'Error en la petición', error})        
     }
 })
-
+//3 - Añadir libro
 app.post('/api/nuevoLibro/:titulo', async(req, res)=>{
     try {        
-      const {titulo, leido} = req.params  
-      const results = await app.locals.db.collection('libros').insertOne({titulo, leido})  
+      const results = await app.locals.db.collection('libros').insertOne({titulo:req.params.titulo, leido: false})  
       res.status(200).send({mensaje: "Libro insertado", results})
     } catch (error) {
         res.status(500).send({mensaje: "No se ha insertado ningun libro"})
     }
 })
-
+// 4 - Edita el libro para cambiar a leido
 app.put('/api/editarLibro/:titulo', async(req, res)=>{
     try {        
       const results = await app.locals.db.collection('libros').updateOne({titulo:req.params.titulo}, {$set: {leido:true}})  
@@ -63,11 +62,11 @@ app.put('/api/editarLibro/:titulo', async(req, res)=>{
         res.status(500).send({mensaje: "No se ha actualizado ningun libro"})
     }
 })
-
+//5 - Borra libro
 app.delete('/api/borrarLibro/:titulo', async(req, res)=>{
     try {        
       const results = await app.locals.db.collection('libros').deleteOne({titulo:req.params.titulo})  
-      results.deleteCount < 1
+      results.deletedCount < 1
       ?res.send({mensaje: "Libro no borrado", results})
       :res.status(200).send({mensaje: "Libro borrado", results})
       
