@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menus</title>
+</head>
+<body>
+    <h1>Gestión de Pedidos</h1> 
+
+    <h2>Agregar Opciones</h2>    
+    <form action="/pedidos/add" method="POST">        
+        <button type="button" onclick="showOptions('')"> Elige Menu</button>
+        <div id="idMenu"></div>
+        <br>
+        <button type="button" onclick="showOptions('')"> Elige Hamburguesa</button>
+        <div id="idHamburguesa"></div>
+        <br>
+        <button type="button" onclick="showOptions('')"> Elige Bebidas</button>
+        <div id="idBebidas"></div>
+        <br>        
+        <br>        
+        <button type="submit">Finalizar Pedido</button>        
+    </form>    
+    
+    <div>
+        <h3></h3>
+    </div>
+
+<script>
+    
+    document.querySelector('form').addEventListener('submit', (e) => {
+        showPedido()
+    })
+
+    function showOptions (ruta) {
+        fetch(`'${ruta}'`)
+        .then((res)=>res.json())
+        .then((datos) => {
+            console.log("DATOS: ", datos)
+            salida = ""
+            datos.results.forEach(element => {
+                salida += `<li>${element.nombre} - ${element.precio}</li>`
+            })
+            document.querySelector("#idMenu").innerHTML = salida
+        })
+    }
+    
+    function showPedido(){
+        /* fetch(`/pedidos/${numPedido}`, {method:"GET"})
+        .then((res) => res.json())
+        .then((datos) => {
+            document.querySelector("h3").innerHTML = `${datos.mensaje}`            
+        }) */
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Subir y descargar archivos</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="archivo">Seleccionar archivo:</label>
+        <input type="file" name="archivo" id="archivo" required>
+        <button type="submit">Subir</button>
+    </form>
+    <div id="imgContent">
+        <img id="imgFile" src="" alt="">
+        <button id="btnDownload" type="button">Descargar</button>
+    </div>
+    
+    <script>
+        fetch('/showImages').then(res=>res.json()).then(datos=>{
+            const salida = ""
+            datos.results.forEach(url => {
+                salida +=`<img src="${url}">`
+            });
+            document.getElementById("imgContent").innerHTML = salida
+        })
+    </script>
+</body>
+</html>
