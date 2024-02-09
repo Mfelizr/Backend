@@ -20,18 +20,18 @@ app.post ('/upload', (req, res) => {
         const file = req.files.archivo
         console.log("Archivo: " + file)
         const md5 = file.md5
-        file.mv('./archivos/' + md5+file.name)
+        file.mv('./archivos/' + md5 + file.name)
         
         res.send ({message: 'Archivo subido', 
                    status:true,
-                   data: {name: file.name, mimetype:file.mimetype, size: file.size}
+                   data: {name: md5+file.name, mimetype:file.mimetype, size: file.size}
                 })
     }
 })
 
 //Descarga de archivo
-app.get('/download/:archivo', (req, res) => {
-    res.download('./archivos' + req.params.archivo)
+app.get('/download', (req, res) => {
+    res.download('./archivos/' + req.body.archivo)
 
 })
 
@@ -39,10 +39,13 @@ app.get('/download/:archivo', (req, res) => {
 app.get('/showImages', (req, res)=>{
     fs.readdir('./archivos', (err, files)=>{
         if(err){
-            res.send({mensaje:"No se ha podido leer el directorio"})
+            res.send({mensaje:"No ha sido posible leer el directorio"})
         }else{
             const imgPaths = files.map((archivo)=> {
-                return {'http://localhost:3000/fotos/'+archivo}
+                return {
+                    url:`http://localhost:3000/fotos/${archivo}`,
+                    nombre: archivo
+                }
             })
             res.send({mensaje: "Archivos recuperados: ", results: imgPaths})
         }

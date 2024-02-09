@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Archivos</title>
 </head>
 <body>
     <h1>Subir y descargar archivos</h1>
@@ -12,16 +12,17 @@
         <input type="file" name="archivo" id="archivo" required>
         <button type="submit">Subir</button>
     </form>
-    <div id="imgContent">
-        <img id="imgFile" src="" alt="">
-        <button id="btnDownload" type="button">Descargar</button>
+    
+    <div id="imgContent" style="display: flex; flex-wrap: wrap; justify-content: center">        
     </div>
     
     <script>
-        fetch('/showImages').then(res=>res.json()).then(datos=>{
+        fetch('/showImages')
+        .then(res=>res.json())
+        .then(datos=>{
             const salida = ""
-            datos.results.forEach(url => {
-                salida +=`<img src="${url}">`
+            datos.results.forEach(img => {                
+                salida += `<button onclick="window.location.href='${img.url}'" download="${img.name}"><img src="${img.url}" alt="${img.name}"></button>`
             });
             document.getElementById("imgContent").innerHTML = salida
         })
