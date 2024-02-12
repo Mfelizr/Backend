@@ -11,10 +11,10 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
 
 app.use(express.static('public'))
-app.use('./menus', menus)
-app.use('./hamburguesas', hamburguesas)
-app.use('./bebidas', bebidas)
-app.use('./bebidas', pedidos)
+app.use('/menus', menus)
+app.use('/hamburguesas', hamburguesas)
+app.use('/bebidas', bebidas)
+app.use('/pedidos', pedidos)
 
 
 const client = new MongoClient('mongodb://127.0.0.1:27017')

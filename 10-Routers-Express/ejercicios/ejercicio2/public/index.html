@@ -4,55 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menus</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Gestión de Pedidos</h1> 
 
     <h2>Agregar Opciones</h2>    
     <form action="/pedidos/add" method="POST">        
-        <button type="button" onclick="showOptions('')"> Elige Menu</button>
-        <div id="idMenu"></div>
+        <button type="button" onclick="showOptions('/menus/show', 'idMenu')"> Elige Menu</button>
+        <div id="divMenu">
+            <select name="idMenu" id="idMenu" class="display-none">                                
+            </select>
+        </div>
         <br>
-        <button type="button" onclick="showOptions('')"> Elige Hamburguesa</button>
-        <div id="idHamburguesa"></div>
+        <button type="button" onclick="showOptions('/hamburguesas/show', 'idHamburguesa')"> Elige Hamburguesa</button>
+        <div id="divHamburguesa">
+            <select name="idHamburguesa" id="idHamburguesa" class="display-none">                                
+            </select>
+        </div>
         <br>
-        <button type="button" onclick="showOptions('')"> Elige Bebidas</button>
-        <div id="idBebidas"></div>
+        <button type="button" onclick="showOptions('/bebidas/show', 'idBebidas')"> Elige Bebidas</button>
+        <div id="divBebidas">
+            <select name="idBebidas" id="idBebidas" class="display-none">                                
+            </select>
+        </div>
         <br>        
         <br>        
-        <button type="submit">Finalizar Pedido</button>        
+        <button class="submit" type="submit">Finalizar Pedido</button>        
     </form>    
     
-    <div>
-        <h3></h3>
+    <div class="display-none" id="cotentPedido">
+        <ul id="listPedido"></ul>
+        <h3>Total a pagar: </h3>
     </div>
 
-<script>
-    
+<script>    
     document.querySelector('form').addEventListener('submit', (e) => {
         showPedido()
     })
 
-    function showOptions (ruta) {
-        fetch(`'${ruta}'`)
+    function showOptions (ruta, id) {        
+        fetch(`${ruta}`)
         .then((res)=>res.json())
         .then((datos) => {
             console.log("DATOS: ", datos)
             salida = ""
             datos.results.forEach(element => {
-                salida += `<li>${element.nombre} - ${element.precio}</li>`
+                salida += `<option value="${element._id}">${element.nombre} - ${element.precio}€</option>`
             })
-            document.querySelector("#idMenu").innerHTML = salida
+            console.log("SALIDA:", salida)
+            document.getElementById(`${id}`).classList.toggle("display-none")
+            document.getElementById(`${id}`).innerHTML =  salida
         })
     }
     
     function showPedido(){
-        /* fetch(`/pedidos/${numPedido}`, {method:"GET"})
+         fetch(`/pedidos/show`)
         .then((res) => res.json())
         .then((datos) => {
-            document.querySelector("h3").innerHTML = `${datos.mensaje}`            
-        }) */
+            let total = 0
+            let salida = ""
+            datos.results.forEach(element => {
+                salida = `<li>${element.nombre} - ${element.precio}€ <button type="button" onclick="editPedido('${element._id}')">Modificar</button><button type="button" onclick="deletePedido('${element._id}')">Eliminar</button></li>`
+                total += element.precio
+            })    
+            document.querySelector(".contentPedido").classList.toggle("display-none")
+            document.querySelector("#listPedido").innerHTML = salida                        
+            document.querySelector("h3").innerHTML += total            
+        }) 
     }
+
 </script>
 </body>
 </html>

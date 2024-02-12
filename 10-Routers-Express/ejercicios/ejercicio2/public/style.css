@@ -1,0 +1,23 @@
+button {
+    background-color: antiquewhite;
+    border-radius: 10px;
+    font-size: medium;
+    font-weight: bold;
+    width: 30em;
+    margin: 10px;
+    padding: 10px;
+}
+select{
+    font-size: medium;
+    width: 30em;
+    margin: 10px;
+    padding: 10px;    
+}
+
+.display-none{
+    display: none;
+}
+
+.submit{
+    background-color: rgb(192, 247, 192);
+}

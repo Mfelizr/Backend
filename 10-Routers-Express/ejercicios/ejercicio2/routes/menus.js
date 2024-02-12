@@ -5,7 +5,7 @@ const router = express.Router()
 // 1- Buscar Menus
 router.get('/show', async(req, res) =>{
     try {
-        const results = await app.locals.db.collection('menus').find().toArray()
+        const results = await req.app.locals.db.collection('productos').find({tipo:"menu"}).toArray()
         res.send({mensaje: 'Consulta realizada', results})
     } catch (error) {
         res.send({mensaje: 'Error en la consulta', error})        
